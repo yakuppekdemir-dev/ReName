@@ -1,0 +1,84 @@
+{
+  "name": "rename",
+  "version": "1.0.0",
+  "description": "Simple, fast batch renaming for photos and videos on macOS and Windows — sequential numbering, prefix/suffix, find & replace, with live preview.",
+  "author": "Pekdemir Labs",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "homepage": "https://github.com/yakuppekdemir-dev/ReName#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yakuppekdemir-dev/ReName.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yakuppekdemir-dev/ReName/issues"
+  },
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "prestart": "node scripts/dev-rename.js",
+    "test": "node test/core.test.js && node test/renamer.test.js",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:mac": "electron-builder --mac",
+    "dist:win": "electron-builder --win"
+  },
+  "build": {
+    "appId": "com.pekdemirlabs.rename",
+    "productName": "ReName",
+    "copyright": "Copyright © 2026 Pekdemir Labs",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "icon": "build/icon.png",
+      "category": "public.app-category.utilities",
+      "darkModeSupport": true,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "identity": null,
+      "target": [
+        { "target": "dmg", "arch": ["arm64", "x64"] },
+        { "target": "zip", "arch": ["arm64", "x64"] }
+      ]
+    },
+    "dmg": {
+      "title": "ReName ${version}",
+      "window": { "width": 540, "height": 380 },
+      "contents": [
+        { "x": 140, "y": 200, "type": "file" },
+        { "x": 400, "y": 200, "type": "link", "path": "/Applications" }
+      ]
+    },
+    "win": {
+      "icon": "build/icon.png",
+      "target": [
+        { "target": "nsis", "arch": ["x64", "arm64"] },
+        { "target": "portable", "arch": ["x64"] }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "ReName",
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false
+    },
+    "linux": {
+      "icon": "build/icon.png",
+      "target": ["AppImage"],
+      "category": "Utility"
+    }
+  },
+  "devDependencies": {
+    "electron": "^42.4.0",
+    "electron-builder": "^26.15.3"
+  }
+}

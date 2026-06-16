@@ -1,0 +1,419 @@
+:root {
+  --bg: #16171a;
+  --bg2: #1b1d22;
+  --panel: #212329;
+  --panel2: #272a31;
+  --elev: #2c3038;
+  --border: #33363d;
+  --border2: #41454e;
+  --text: #e8eaef;
+  --muted: #9aa0ab;
+  --faint: #6b7079;
+  --accent: #3b82f6;
+  --accent2: #2f6fe0;
+  --accent-soft: rgba(59, 130, 246, 0.16);
+  --danger: #ef4444;
+  --danger-soft: rgba(239, 68, 68, 0.14);
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --radius: 11px;
+  --radius-sm: 8px;
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }   /* hidden ozniteligi her zaman gizlesin (display kurallarini ezmesin) */
+
+html, body { height: 100%; }
+
+body {
+  font-family: var(--font);
+  font-size: 13.5px;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-user-select: none;
+  user-select: none;
+  overflow: hidden;
+}
+
+.app { display: flex; flex-direction: column; height: 100vh; }
+
+/* ------------------------------ Titlebar ------------------------------ */
+.titlebar {
+  -webkit-app-region: drag;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 16px 0 86px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  flex: 0 0 auto;
+}
+.brand { display: flex; align-items: center; gap: 10px; }
+.logo {
+  width: 30px; height: 30px;
+  display: grid; place-items: center;
+  background: linear-gradient(140deg, var(--accent), #6366f1);
+  color: #fff; font-weight: 800; font-size: 12px; letter-spacing: 0.5px;
+  border-radius: 9px;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+}
+.brand-name { font-weight: 700; font-size: 15px; }
+.brand-sub { color: var(--faint); font-size: 12px; margin-left: 2px; }
+.titlebar-actions { -webkit-app-region: no-drag; display: flex; gap: 8px; }
+
+/* ------------------------------ Buttons ------------------------------- */
+.btn {
+  -webkit-app-region: no-drag;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--text);
+  background: var(--elev);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 7px 13px;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, transform 0.05s, opacity 0.12s;
+}
+.btn:hover { background: #343943; }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn.ghost { background: transparent; border-color: var(--border); }
+.btn.ghost:hover:not(:disabled) { background: var(--panel2); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover:not(:disabled) { background: var(--accent2); }
+.btn.icon { padding: 7px 11px; min-width: 38px; font-size: 15px; }
+
+/* ------------------------------ Content ------------------------------- */
+.content { flex: 1 1 auto; display: flex; min-height: 0; }
+
+/* List pane */
+.list-pane { flex: 1 1 auto; display: flex; flex-direction: column; min-width: 0; position: relative; }
+
+.list-head {
+  display: grid;
+  grid-template-columns: var(--check-w, 0px) 28px 40px 1fr 30px 1fr 34px;
+  align-items: center;
+  gap: 4px;
+  padding: 9px 16px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--faint);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+}
+.col-new { padding-left: 4px; }
+
+/* ---- Kapsam / secim araç çubuğu ---- */
+.list-toolbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 8px 14px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+.scope { display: flex; align-items: center; gap: 8px; }
+.scope-label { font-size: 11.5px; color: var(--muted); font-weight: 550; }
+.segmented.sm { padding: 2px; }
+.segmented.sm button { padding: 5px 10px; font-size: 11.5px; }
+.sel-info { display: none; align-items: center; gap: 10px; }
+.app.pick-mode .sel-info { display: flex; }
+#selCount { font-size: 12px; color: var(--accent); font-weight: 600; }
+.btn.sm { padding: 4px 9px; font-size: 11.5px; }
+
+/* ---- Satir onay kutusu (yalnizca "Secili" kapsaminda gorunur) ---- */
+.app.pick-mode { --check-w: 26px; }
+.row-check { display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.row-check input { display: none; width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; }
+.app.pick-mode .row-check input { display: block; }
+.rowcb { pointer-events: none; }  /* satir onay kutusu gorsel gosterge; tiklama satira gelir */
+.app.pick-mode .row .row-check { cursor: pointer; }
+
+/* ---- RTL (Arapca) ---- */
+[dir="rtl"] .row.marked { box-shadow: inset -3px 0 0 0 var(--accent); }
+[dir="rtl"] .arrow { display: inline-block; transform: scaleX(-1); }
+[dir="rtl"] .idx { text-align: left; padding-right: 0; padding-left: 6px; }
+[dir="rtl"] .brand-sub { margin-left: 0; margin-right: 2px; }
+[dir="rtl"] .oldname, [dir="rtl"] .newname { direction: rtl; }
+.row.marked { box-shadow: inset 3px 0 0 0 var(--accent); background: rgba(59, 130, 246, 0.07); }
+.row.marked:hover { background: rgba(59, 130, 246, 0.11); }
+
+.file-list { flex: 1 1 auto; overflow-y: auto; padding: 6px 8px 12px; }
+
+.row {
+  display: grid;
+  grid-template-columns: var(--check-w, 0px) 28px 40px 1fr 30px 1fr 34px;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+}
+.row:hover { background: var(--panel); }
+.row.dragging { opacity: 0.5; background: var(--panel2); }
+.row.changed { }
+
+.grip { color: var(--faint); cursor: grab; text-align: center; font-size: 13px; letter-spacing: -2px; }
+.grip:active { cursor: grabbing; }
+.idx { color: var(--faint); font-variant-numeric: tabular-nums; text-align: right; padding-right: 6px; font-size: 12px; }
+.ftype { display: none; }
+
+.oldname, .newname {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.oldname { color: var(--muted); display: flex; align-items: center; gap: 7px; }
+.oldname .kind { font-size: 13px; flex: 0 0 auto; filter: grayscale(0.1); }
+.arrow { color: var(--faint); text-align: center; }
+.newname { color: var(--text); padding-left: 4px; }
+.row.changed .newname { color: #cfe0ff; }
+.row.same .newname { color: var(--faint); }
+.newname.bad {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-radius: 5px;
+  padding: 2px 6px;
+}
+
+.remove {
+  -webkit-app-region: no-drag;
+  width: 24px; height: 24px;
+  display: grid; place-items: center;
+  border: none; background: transparent;
+  color: var(--faint); cursor: pointer;
+  border-radius: 6px; font-size: 17px; line-height: 1;
+}
+.remove:hover { background: var(--danger-soft); color: var(--danger); }
+
+/* Empty state */
+.empty {
+  height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 6px; color: var(--faint);
+  border: 2px dashed var(--border2);
+  border-radius: var(--radius);
+  margin: 8px;
+}
+.empty-icon { font-size: 34px; opacity: 0.6; margin-bottom: 6px; }
+.empty-title { font-size: 16px; color: var(--muted); font-weight: 600; }
+.empty-sub { font-size: 13px; }
+.empty-hint { font-size: 12px; opacity: 0.7; margin-top: 4px; }
+
+/* Drop overlay */
+.drop-overlay {
+  position: absolute; inset: 8px;
+  display: none; place-items: center;
+  background: var(--accent-soft);
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius);
+  font-size: 18px; font-weight: 700; color: #cfe0ff;
+  pointer-events: none; z-index: 5;
+}
+.drop-overlay.on { display: grid; }
+
+/* ------------------------------ Splitter ------------------------------ */
+.splitter {
+  flex: 0 0 5px;
+  background: var(--bg2);
+  cursor: col-resize;
+  z-index: 5;
+  transition: background 0.12s;
+}
+.splitter:hover, .splitter.dragging { background: var(--accent); }
+
+/* ------------------------------ Controls ------------------------------ */
+.controls {
+  flex: 0 0 360px;
+  width: 360px;
+  background: var(--bg2);
+  border-left: 1px solid var(--border);
+  padding: 14px;
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+.mode-tabs {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 4px; padding: 4px;
+  background: var(--panel); border-radius: var(--radius-sm);
+}
+.tab {
+  font-family: inherit; font-size: 12.5px; font-weight: 550;
+  color: var(--muted); background: transparent;
+  border: none; border-radius: 6px; padding: 7px 4px; cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.tab:hover { color: var(--text); }
+.tab.active { background: var(--elev); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.25); }
+
+.panel { display: flex; flex-direction: column; gap: 12px; }
+.panel.hidden { display: none; }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.label { font-size: 11.5px; color: var(--muted); font-weight: 550; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+input[type="text"], input[type="number"], select {
+  -webkit-user-select: text; user-select: text;
+  font-family: inherit; font-size: 13.5px;
+  color: var(--text); background: var(--panel);
+  border: 1px solid var(--border2); border-radius: var(--radius-sm);
+  padding: 9px 10px; width: 100%; outline: none;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+input::placeholder { color: var(--faint); }
+input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+select { cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M3 4.5L6 7.5L9 4.5' stroke='%239aa0ab' stroke-width='1.4' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px;
+}
+
+.segmented {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  gap: 3px; padding: 3px; background: var(--panel); border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.segmented button {
+  font-family: inherit; font-size: 12.5px; font-weight: 550;
+  color: var(--muted); background: transparent; border: none;
+  border-radius: 6px; padding: 7px 6px; cursor: pointer; transition: background 0.12s, color 0.12s;
+}
+.segmented button.on { background: var(--elev); color: var(--text); }
+
+.check { display: flex; align-items: center; gap: 9px; cursor: pointer; font-size: 13px; color: var(--muted); }
+.check input { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+
+.note { font-size: 11.5px; color: var(--faint); line-height: 1.45; }
+
+.sort-block {
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.block-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--faint); font-weight: 600; }
+.sort-row { display: flex; gap: 8px; }
+.sort-row select { flex: 1 1 auto; }
+
+/* ------------------------------ Statusbar ----------------------------- */
+.statusbar {
+  flex: 0 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 11px 16px;
+  background: var(--bg2); border-top: 1px solid var(--border);
+}
+.status { font-size: 12.5px; color: var(--muted); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.status.ok { color: var(--ok); }
+.status.err { color: var(--danger); }
+.status.busy { color: var(--warn); }
+.foot-actions { display: flex; gap: 8px; flex: 0 0 auto; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-thumb { background: #3a3e46; border-radius: 8px; border: 3px solid var(--bg2); }
+::-webkit-scrollbar-thumb:hover { background: #474c56; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ---------------------- Onizleme paneli ---------------------- */
+.preview { display: flex; flex-direction: column; gap: 7px; }
+.preview-stage {
+  width: 100%;
+  min-height: 110px;
+  max-height: min(46vh, 380px);
+  margin: 0 auto;
+  border-radius: var(--radius);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+/* Medya kendi dogal en-boy oraninda; tarayici olceklendirir -> oynatma durumundan
+   bagimsiz olarak oran ASLA bozulmaz. Genislik panelle (splitter) buyur/kuculur. */
+.preview-img {
+  max-width: 100%;
+  max-height: min(46vh, 380px);
+  width: auto; height: auto;
+  object-fit: contain;
+  display: block;
+  background: #000;
+}
+.preview-mute {
+  position: absolute; bottom: 8px; right: 8px;
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(18,20,26,0.6); color: #fff; font-size: 14px;
+  display: grid; place-items: center; cursor: pointer;
+  transition: background 0.12s, transform 0.08s;
+}
+.preview-mute:hover { background: rgba(59,130,246,0.85); transform: scale(1.06); }
+.preview-play {
+  position: absolute;
+  width: 58px; height: 58px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(18,20,26,0.55);
+  color: #fff; font-size: 21px; line-height: 1;
+  display: grid; place-items: center;
+  cursor: pointer; padding-left: 4px;
+  transition: background 0.12s, transform 0.08s;
+}
+.preview-play:hover { background: rgba(59,130,246,0.9); transform: scale(1.06); }
+.preview-stage.playing { cursor: pointer; }
+.preview-empty { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--faint); padding: 8px; text-align: center; }
+.pe-icon { font-size: 26px; opacity: 0.5; }
+.pe-text { font-size: 12px; }
+.preview-name {
+  font-family: var(--mono); font-size: 12px; color: var(--muted);
+  text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  min-height: 15px;
+}
+
+/* ---------------------- Satir kucuk resmi ---------------------- */
+.oldname .kind {
+  width: 28px; height: 28px; flex: 0 0 auto;
+  display: grid; place-items: center;
+  border-radius: 6px; overflow: hidden;
+  background: var(--panel2);
+}
+.kind .thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+.kind .kicon { font-size: 14px; }
+
+/* ---------------------- Secili satir ---------------------- */
+.row.selected { background: var(--accent-soft); border-color: rgba(59,130,246,0.5); }
+.row.selected:hover { background: var(--accent-soft); }
+
+/* ---------------------- Manuel duzenleme ---------------------- */
+.newname.manual { color: #cfe0ff; }
+.newname.manual::before { content: '\270E\00A0'; color: var(--accent); font-size: 11px; opacity: 0.9; }
+.newname-edit {
+  width: 100%;
+  font-family: var(--mono); font-size: 12.5px;
+  color: var(--text); background: var(--elev);
+  border: 1px solid var(--accent);
+  border-radius: 5px; padding: 2px 6px; outline: none;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* Light mode */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f4f5f7; --bg2: #ffffff; --panel: #f1f2f5; --panel2: #e9ebef;
+    --elev: #ffffff; --border: #e2e4e9; --border2: #d3d6dd;
+    --text: #1c1e23; --muted: #5b616b; --faint: #9398a1;
+    --accent-soft: rgba(59, 130, 246, 0.12);
+    --shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+  }
+  .btn { box-shadow: 0 1px 1px rgba(0,0,0,0.04); }
+  .tab.active, .segmented button.on { box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+  ::-webkit-scrollbar-thumb { background: #cfd2d8; border-color: var(--bg2); }
+  .row.changed .newname { color: #1d4ed8; }
+}

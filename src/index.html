@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: media:; media-src 'self' media:;" />
+  <title>ReName</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+
+    <!-- Ust bar -->
+    <header class="titlebar">
+      <div class="brand">
+        <span class="logo">RN</span>
+        <span class="brand-name">ReName</span>
+        <span class="brand-sub" data-i18n="subtitle">toplu yeniden adlandırma</span>
+      </div>
+      <div class="titlebar-actions">
+        <button id="btnAdd" class="btn" data-i18n="addFiles">＋ Dosya Ekle</button>
+        <button id="btnClear" class="btn ghost" data-i18n="clear" disabled>Temizle</button>
+      </div>
+    </header>
+
+    <!-- Govde -->
+    <main class="content">
+
+      <!-- Dosya listesi -->
+      <section class="list-pane">
+        <div class="list-toolbar">
+          <div class="scope">
+            <span class="scope-label" data-i18n="scope">Kapsam</span>
+            <div class="segmented sm" id="scopeToggle" data-value="all">
+              <button data-val="all" class="on" data-i18n="scopeAll">Tum dosyalar</button>
+              <button data-val="selected" data-i18n="scopeSelected">Secili dosyalar</button>
+            </div>
+          </div>
+          <div class="sel-info">
+            <span id="selCount">0</span>
+            <button class="btn ghost sm" id="selClear" data-i18n="clearSel">Secimi temizle</button>
+          </div>
+        </div>
+        <div class="list-head">
+          <span class="row-check"><input type="checkbox" id="selAll" data-i18n-title="selAllTitle" /></span>
+          <span class="col-grip"></span>
+          <span class="col-idx">#</span>
+          <span class="col-old" data-i18n="colOld">Mevcut ad</span>
+          <span class="col-arrow"></span>
+          <span class="col-new" data-i18n="colNew">Yeni ad</span>
+          <span class="col-rm"></span>
+        </div>
+
+        <div id="fileList" class="file-list">
+          <div id="emptyState" class="empty">
+            <div class="empty-icon">⬇︎</div>
+            <p class="empty-title" data-i18n="dropTitle">Dosyalari buraya surukleyin</p>
+            <p class="empty-sub" data-i18n="dropSub">veya ust koseden Dosya Ekle'ye tiklayin</p>
+            <p class="empty-hint" data-i18n="dropHint">Fotograf ve videolar &middot; mevcut sira korunur</p>
+          </div>
+        </div>
+
+        <div id="dropOverlay" class="drop-overlay"><span data-i18n="dropOverlay">Birakin</span></div>
+      </section>
+
+      <!-- Surukleyerek genislik ayari -->
+      <div class="splitter" id="splitter"></div>
+
+      <!-- Kontrol paneli -->
+      <aside class="controls" id="controls">
+
+        <!-- ONIZLEME -->
+        <div class="preview">
+          <div class="preview-stage" id="previewStage">
+            <div class="preview-empty" id="previewEmpty">
+              <span class="pe-icon">▣</span>
+              <span class="pe-text" data-i18n="previewEmpty">Onizleme icin bir dosyaya tikla</span>
+            </div>
+            <img id="previewImg" class="preview-img" alt="" hidden />
+            <video id="previewVideo" class="preview-img" muted playsinline hidden></video>
+            <button id="previewPlay" class="preview-play" hidden data-i18n-title="playTitle" aria-label="Play">▶</button>
+            <button id="previewMute" class="preview-mute" hidden aria-label="Sound">🔇</button>
+          </div>
+          <div id="previewName" class="preview-name"></div>
+        </div>
+
+        <div class="mode-tabs" role="tablist">
+          <button class="tab active" data-mode="number" data-i18n="tabNumber">Numaralandir</button>
+          <button class="tab" data-mode="add" data-i18n="tabAdd">Metin Ekle</button>
+          <button class="tab" data-mode="replace" data-i18n="tabReplace">Bul &amp; Degistir</button>
+        </div>
+
+        <!-- NUMARALANDIR -->
+        <div class="panel" data-panel="number">
+          <label class="field">
+            <span class="label" data-i18n="baseName">Taban ad</span>
+            <input id="numBase" type="text" data-i18n-ph="baseNamePh" autocomplete="off" />
+          </label>
+
+          <div class="field">
+            <span class="label" data-i18n="numPos">Numara konumu</span>
+            <div class="segmented" id="numPosition" data-value="after">
+              <button data-val="before" data-i18n="posBefore">Basta</button>
+              <button data-val="after" class="on" data-i18n="posAfter">Sonda</button>
+            </div>
+          </div>
+
+          <div class="grid2">
+            <label class="field">
+              <span class="label" data-i18n="start">Baslangic</span>
+              <input id="numStart" type="number" value="1" step="1" />
+            </label>
+            <label class="field">
+              <span class="label" data-i18n="step">Artis</span>
+              <input id="numStep" type="number" value="1" min="1" step="1" />
+            </label>
+          </div>
+
+          <div class="grid2">
+            <label class="field">
+              <span class="label" data-i18n="pad">Basamak</span>
+              <select id="numPad">
+                <option value="auto" selected data-i18n="padAuto">Otomatik</option>
+                <option value="1">1 (1)</option>
+                <option value="2">2 (01)</option>
+                <option value="3">3 (001)</option>
+                <option value="4">4 (0001)</option>
+                <option value="5">5 (00001)</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="label" data-i18n="sep">Ayrac</span>
+              <select id="numSep">
+                <option value=" " selected data-i18n="sepSpace">Bosluk</option>
+                <option value="_" data-i18n="sepUnderscore">Alt cizgi _</option>
+                <option value="-" data-i18n="sepDash">Tire -</option>
+                <option value="." data-i18n="sepDot">Nokta .</option>
+                <option value="" data-i18n="sepNone">Yok</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="field">
+            <span class="label" data-i18n="numDir">Numara yonu</span>
+            <div class="segmented" id="numDir" data-value="asc">
+              <button data-val="asc" class="on" data-i18n="dirAsc">Artan 1→9</button>
+              <button data-val="desc" data-i18n="dirDesc">Azalan 9→1</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- METIN EKLE -->
+        <div class="panel hidden" data-panel="add">
+          <label class="field">
+            <span class="label" data-i18n="prefix">Basa eklenecek (on ek)</span>
+            <input id="addPrefix" type="text" data-i18n-ph="prefixPh" autocomplete="off" />
+          </label>
+          <label class="field">
+            <span class="label" data-i18n="suffix">Sona eklenecek (son ek)</span>
+            <input id="addSuffix" type="text" data-i18n-ph="suffixPh" autocomplete="off" />
+          </label>
+          <p class="note" data-i18n="extNote">Uzantiya dokunulmaz.</p>
+        </div>
+
+        <!-- BUL & DEGISTIR -->
+        <div class="panel hidden" data-panel="replace">
+          <label class="field">
+            <span class="label" data-i18n="find">Bul</span>
+            <input id="repFind" type="text" data-i18n-ph="findPh" autocomplete="off" />
+          </label>
+          <label class="field">
+            <span class="label" data-i18n="replaceWith">Yerine koy</span>
+            <input id="repWith" type="text" data-i18n-ph="replaceWithPh" autocomplete="off" />
+          </label>
+          <label class="check">
+            <input id="repCase" type="checkbox" />
+            <span data-i18n="caseSensitive">Buyuk/kucuk harf duyarli</span>
+          </label>
+          <label class="check">
+            <input id="repExt" type="checkbox" />
+            <span data-i18n="includeExt">Uzantida da ara</span>
+          </label>
+        </div>
+
+        <!-- SIRALAMA -->
+        <div class="sort-block">
+          <span class="block-title" data-i18n="sortTitle">Siralama</span>
+          <div class="sort-row">
+            <select id="sortKey">
+              <option value="name" selected data-i18n="sortName">Ada gore (mevcut sira)</option>
+              <option value="created" data-i18n="sortCreated">Olusturma tarihi</option>
+              <option value="modified" data-i18n="sortModified">Degistirme tarihi</option>
+              <option value="size" data-i18n="sortSize">Boyut</option>
+              <option value="manual" data-i18n="sortManual">Manuel</option>
+            </select>
+            <button id="sortDir" class="btn icon" data-value="asc" data-i18n-title="sortDirTitle">↑</button>
+          </div>
+          <p class="note" data-i18n="sortNote">Numaralar bu siraya gore verilir; diskteki sira degismez.</p>
+        </div>
+
+      </aside>
+    </main>
+
+    <!-- Alt bar -->
+    <footer class="statusbar">
+      <div id="status" class="status" data-i18n="statusStart">Baslamak icin dosya ekleyin.</div>
+      <div class="foot-actions">
+        <button id="btnUndo" class="btn ghost" data-i18n="undo" disabled>↩︎ Geri Al</button>
+        <button id="btnApply" class="btn primary" data-i18n="apply" disabled>Uygula</button>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="i18n.js"></script>
+  <script src="core.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>

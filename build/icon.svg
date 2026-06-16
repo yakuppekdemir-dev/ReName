@@ -1,0 +1,44 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="150" y1="120" x2="880" y2="930" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4F8DF7"/>
+      <stop offset="0.55" stop-color="#3B6FE6"/>
+      <stop offset="1" stop-color="#5B57E0"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="430" y1="400" x2="610" y2="610" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#6366F1"/>
+    </linearGradient>
+    <linearGradient id="sheen" x1="512" y1="96" x2="512" y2="620" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="26" stdDeviation="30" flood-color="#16225e" flood-opacity="0.34"/>
+    </filter>
+  </defs>
+
+  <!-- arka plan (yuvarlak kose, marka gradyani + ust isik) -->
+  <rect x="84" y="84" width="856" height="856" rx="220" fill="url(#bg)"/>
+  <rect x="84" y="84" width="856" height="856" rx="220" fill="url(#sheen)"/>
+
+  <!-- yelpaze: 3 medya karti (toplu + sira) -->
+  <g filter="url(#cardShadow)">
+    <g transform="rotate(-17 512 742)">
+      <rect x="372" y="320" width="280" height="360" rx="40" fill="#FFFFFF" opacity="0.80"/>
+    </g>
+    <g transform="rotate(17 512 742)">
+      <rect x="372" y="320" width="280" height="360" rx="40" fill="#FFFFFF" opacity="0.80"/>
+    </g>
+    <rect x="356" y="300" width="312" height="392" rx="46" fill="#FFFFFF"/>
+  </g>
+
+  <!-- on kartta oynat ucgeni (video / medya) -->
+  <path d="M474 410 L474 582 L612 496 Z" fill="url(#accent)"
+        stroke="url(#accent)" stroke-width="30" stroke-linejoin="round"/>
+
+  <!-- sira ipucu: artan uc nokta (numaralandirma) -->
+  <circle cx="452" cy="636" r="11" fill="url(#accent)" opacity="0.55"/>
+  <circle cx="512" cy="636" r="15" fill="url(#accent)" opacity="0.78"/>
+  <circle cx="578" cy="636" r="19" fill="url(#accent)"/>
+</svg>
