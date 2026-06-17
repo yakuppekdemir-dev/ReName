@@ -135,6 +135,7 @@ function buildMenu(lang) {
     label: tr('mFile'),
     submenu: [
       { label: tr('miAdd'), accelerator: 'CmdOrCtrl+O', click: () => sendAction('add') },
+      { label: tr('miAddFolder'), accelerator: 'CmdOrCtrl+Shift+O', click: () => sendAction('add-folder') },
       { label: tr('miClearList'), click: () => sendAction('clear') },
       { type: 'separator' },
       { label: tr('miApply'), accelerator: 'CmdOrCtrl+Return', click: () => sendAction('apply') },
@@ -239,15 +240,42 @@ async function statToMeta(filePath) {
   };
 }
 
+const MEDIA_EXTS = new Set([...IMAGE_EXTS, ...VIDEO_EXTS]);
+function isMediaFile(name) {
+  return MEDIA_EXTS.has(path.extname(name).slice(1).toLowerCase());
+}
+
+// Klasoru (alt klasorler dahil) gezip medya dosyalarini toplar
+async function walkMedia(dir, out, depth) {
+  if (depth > 8) return; // asiri derinlik koruması
+  let entries;
+  try { entries = await fsp.readdir(dir, { withFileTypes: true }); } catch (_) { return; }
+  for (const e of entries) {
+    if (e.name.startsWith('.')) continue; // gizli oge atla
+    const full = path.join(dir, e.name);
+    if (e.isDirectory()) await walkMedia(full, out, depth + 1);
+    else if (e.isFile() && isMediaFile(e.name)) out.push(full);
+  }
+}
+
+// Verilen yollardan meta listesi: klasorler medya dosyalarina genisletilir,
+// dosyalar oldugu gibi alinir (tekrarlananlar elenir).
 async function collectMeta(paths) {
-  const out = [];
+  const files = [];
   for (const p of paths) {
     try {
-      const m = await statToMeta(p);
-      if (m) out.push(m);
-    } catch (_) {
-      /* erisilemeyen dosyayi atla */
-    }
+      const st = await fsp.stat(p);
+      if (st.isDirectory()) await walkMedia(p, files, 0);
+      else if (st.isFile()) files.push(p);
+    } catch (_) { /* erisilemeyeni atla */ }
+  }
+  const seen = new Set();
+  const out = [];
+  for (const fp of files) {
+    const key = (isMac || process.platform === 'win32') ? fp.toLowerCase() : fp;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    try { const m = await statToMeta(fp); if (m) out.push(m); } catch (_) {}
   }
   return out;
 }
@@ -269,7 +297,18 @@ ipcMain.handle('dialog:openFiles', async () => {
   return collectMeta(res.filePaths);
 });
 
-// Surukle-birak ile gelen yollarin meta bilgisi
+// Klasor secme penceresi (icindeki tum medyayi, alt klasorler dahil alir)
+ipcMain.handle('dialog:openFolder', async () => {
+  const res = await dialog.showOpenDialog(win, {
+    title: I18N.t(currentLang, 'addFolder'),
+    buttonLabel: I18N.t(currentLang, 'addFolder'),
+    properties: ['openDirectory', 'multiSelections']
+  });
+  if (res.canceled) return [];
+  return collectMeta(res.filePaths);
+});
+
+// Surukle-birak ile gelen yollarin meta bilgisi (klasorler genisletilir)
 ipcMain.handle('files:meta', async (_e, paths) => collectMeta(paths));
 
 // Finder/Explorer'da goster

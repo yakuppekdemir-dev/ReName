@@ -5,6 +5,8 @@ const { contextBridge, ipcRenderer, webUtils } = require('electron');
 contextBridge.exposeInMainWorld('api', {
   // Yerel dosya secme penceresini acar
   openFiles: () => ipcRenderer.invoke('dialog:openFiles'),
+  // Klasor secme penceresi (icindeki tum medyayi alir)
+  openFolder: () => ipcRenderer.invoke('dialog:openFolder'),
   // Surukle-birak yollari -> meta bilgisi
   getMeta: (paths) => ipcRenderer.invoke('files:meta', paths),
   // Yeniden adlandirma islemi

@@ -231,6 +231,7 @@ function isTextFocused() {
 function handleMenu(action) {
   switch (action) {
     case 'add': $('btnAdd').click(); break;
+    case 'add-folder': $('btnAddFolder').click(); break;
     case 'clear': clearAll(); break;
     case 'apply': if (!btnApply.disabled) apply(); break;
     case 'undo':
@@ -755,6 +756,10 @@ function setSegment(groupEl, val) {
 ===================================================================== */
 $('btnAdd').addEventListener('click', async () => {
   const metas = await window.api.openFiles();
+  addFiles(metas);
+});
+$('btnAddFolder').addEventListener('click', async () => {
+  const metas = await window.api.openFolder();
   addFiles(metas);
 });
 btnClear.addEventListener('click', clearAll);
