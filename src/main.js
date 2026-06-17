@@ -79,6 +79,33 @@ function showShortcuts(lang) {
   });
 }
 
+// Markali, cok dilli "Hakkinda" penceresi
+let aboutWin = null;
+function openAbout() {
+  if (aboutWin && !aboutWin.isDestroyed()) { aboutWin.focus(); return; }
+  aboutWin = new BrowserWindow({
+    width: 440, height: 512,
+    resizable: false, minimizable: false, maximizable: false, fullscreenable: false,
+    title: I18N.t(currentLang, 'miAbout'),
+    backgroundColor: '#16171a',
+    autoHideMenuBar: true,
+    parent: win || undefined,
+    show: false,
+    webPreferences: { contextIsolation: true, nodeIntegration: false }
+  });
+  aboutWin.setMenuBarVisibility(false);
+  const u = pathToFileURL(path.join(__dirname, 'about.html'));
+  u.searchParams.set('lang', currentLang);
+  u.searchParams.set('v', app.getVersion());
+  aboutWin.loadURL(u.href);
+  aboutWin.webContents.setWindowOpenHandler(({ url }) => {
+    if (/^https?:\/\//i.test(url)) shell.openExternal(url);
+    return { action: 'deny' };
+  });
+  aboutWin.once('ready-to-show', () => aboutWin.show());
+  aboutWin.on('closed', () => { aboutWin = null; });
+}
+
 // i18n'li tam uygulama menusu (kisayollar + dil secimi)
 function buildMenu(lang) {
   const tr = (k) => I18N.t(lang, k);
@@ -93,7 +120,7 @@ function buildMenu(lang) {
     template.push({
       label: 'ReName',
       submenu: [
-        { label: tr('miAbout'), role: 'about' },
+        { label: tr('miAbout'), click: () => openAbout() },
         { type: 'separator' },
         { label: tr('miHide'), role: 'hide' },
         { role: 'hideOthers' },
@@ -156,7 +183,8 @@ function buildMenu(lang) {
   template.push({
     label: tr('mHelp'),
     submenu: [
-      { label: tr('miShortcuts'), accelerator: 'CmdOrCtrl+/', click: () => showShortcuts(lang) }
+      { label: tr('miShortcuts'), accelerator: 'CmdOrCtrl+/', click: () => showShortcuts(lang) },
+      ...(isMac ? [] : [{ type: 'separator' }, { label: tr('miAbout'), click: () => openAbout() }])
     ]
   });
 

@@ -60,6 +60,11 @@
       miPlay3: 'Oynat / Duraklat (Boşluk)', miPlayFull: 'Tüm Videoyu Oynat (Shift+Boşluk)', miMute: 'Sesi Aç/Kapat',
       miMinimize: 'Küçült', miClose: 'Kapat', miShortcuts: 'Klavye Kısayolları',
       miAbout: 'ReName Hakkında', miHide: 'ReName Gizle', miQuit: 'ReName Çıkış',
+      aboutVersion: 'Sürüm {v}',
+      aboutDesc: 'Fotoğraf ve videoları toplu, sıralı ve güvenli şekilde yeniden adlandırın.',
+      aboutBy: 'Pekdemir Labs tarafından geliştirildi',
+      aboutLicenseLine: 'Kişisel kullanım için ücretsiz · PolyForm Noncommercial 1.0.0',
+      aboutRepo: "GitHub'da görüntüle", aboutClose: 'Kapat',
       scTitle: 'Klavye Kısayolları',
       scBody: 'Dosya Ekle — Cmd/Ctrl + O\nUygula — Cmd/Ctrl + Return\nGeri Al — Cmd/Ctrl + Z\nTümünü Seç — Cmd/Ctrl + A\nSeçimi Kaldır — Cmd/Ctrl + D\n\nÖnizlemeyi oynat/duraklat — Boşluk\nTüm videoyu döngüde oynat — Shift + Boşluk\n\nTekli işaretle — Cmd/Ctrl + tık\nAralık işaretle — Shift + tık'
     },
@@ -114,6 +119,11 @@
       miPlay3: 'Play / Pause (Space)', miPlayFull: 'Play Whole Video (Shift+Space)', miMute: 'Toggle Sound',
       miMinimize: 'Minimize', miClose: 'Close', miShortcuts: 'Keyboard Shortcuts',
       miAbout: 'About ReName', miHide: 'Hide ReName', miQuit: 'Quit ReName',
+      aboutVersion: 'Version {v}',
+      aboutDesc: 'Batch rename photos and videos in a clean, sequential, and safe way.',
+      aboutBy: 'Made by Pekdemir Labs',
+      aboutLicenseLine: 'Free for personal use · PolyForm Noncommercial 1.0.0',
+      aboutRepo: 'View on GitHub', aboutClose: 'Close',
       scTitle: 'Keyboard Shortcuts',
       scBody: 'Add Files — Cmd/Ctrl + O\nApply — Cmd/Ctrl + Return\nUndo — Cmd/Ctrl + Z\nSelect All — Cmd/Ctrl + A\nDeselect All — Cmd/Ctrl + D\n\nPlay/pause preview — Space\nLoop whole video — Shift + Space\n\nMark one — Cmd/Ctrl + click\nMark a range — Shift + click'
     },
@@ -168,6 +178,11 @@
       miPlay3: 'تشغيل / إيقاف مؤقت (مسافة)', miPlayFull: 'تشغيل الفيديو كاملاً (Shift+مسافة)', miMute: 'كتم/تشغيل الصوت',
       miMinimize: 'تصغير', miClose: 'إغلاق', miShortcuts: 'اختصارات لوحة المفاتيح',
       miAbout: 'حول ReName', miHide: 'إخفاء ReName', miQuit: 'إنهاء ReName',
+      aboutVersion: 'الإصدار {v}',
+      aboutDesc: 'إعادة تسمية الصور ومقاطع الفيديو دفعة واحدة وبترتيب وأمان.',
+      aboutBy: 'تطوير Pekdemir Labs',
+      aboutLicenseLine: 'مجاني للاستخدام الشخصي · PolyForm Noncommercial 1.0.0',
+      aboutRepo: 'عرض على GitHub', aboutClose: 'إغلاق',
       scTitle: 'اختصارات لوحة المفاتيح',
       scBody: 'إضافة ملفات — Cmd/Ctrl + O\nتطبيق — Cmd/Ctrl + Return\nتراجع — Cmd/Ctrl + Z\nتحديد الكل — Cmd/Ctrl + A\nإلغاء التحديد — Cmd/Ctrl + D\n\nتشغيل/إيقاف المعاينة — مسافة\nتشغيل الفيديو كاملاً في حلقة — Shift + مسافة\n\nتحديد عنصر — Cmd/Ctrl + نقر\nتحديد نطاق — Shift + نقر'
     }
