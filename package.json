@@ -1,6 +1,6 @@
 {
   "name": "rename",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple, fast batch renaming for photos and videos on macOS and Windows — sequential numbering, prefix/suffix, find & replace, with live preview.",
   "author": "Pekdemir Labs",
   "license": "PolyForm-Noncommercial-1.0.0",
