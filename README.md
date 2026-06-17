@@ -63,9 +63,8 @@ Download the latest build from the [Releases](../../releases/latest) page.
 ### macOS
 
 1. Open the `.dmg` and drag **ReName** into your **Applications** folder.
-2. The first time you launch it, macOS may say the developer "cannot be verified" because
-   the app is not yet code‑signed. **Right‑click the app → Open → Open** once, and it will
-   launch normally from then on.
+2. Launch it from Applications — it just opens. The macOS builds are **signed with an Apple
+   Developer ID and notarized by Apple**, so there is no "unidentified developer" warning.
 
 > ReName installs into Applications and appears in Launchpad and the Dock with its own icon.
 
@@ -117,10 +116,9 @@ npm run dist:win   # build Windows installer + portable .exe (run on Windows)
 
 ### Code signing
 
-The published builds are **unsigned**. To ship signed, notarized builds under
-**Pekdemir Labs**, an Apple Developer ID certificate (macOS) and a code‑signing certificate
-(Windows) are needed; the project is already configured so those builds can be produced once
-the certificates are available.
+The macOS builds are **signed with an Apple Developer ID and notarized by Apple**, so they
+launch without Gatekeeper warnings. Windows builds are currently unsigned (a code‑signing
+certificate would remove the SmartScreen "unknown publisher" prompt).
 
 ## Tech
 
